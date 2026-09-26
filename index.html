@@ -16,23 +16,18 @@
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans antialiased">
 
-    <!-- Шапка та Таймер -->
-    <header class="bg-red-700 text-white p-4 shadow-md sticky top-0 z-40">
-        <div class="max-w-5xl mx-auto flex justify-between items-center">
-            <h1 class="text-xl md:text-2xl font-bold"><i class="fas fa-shield-alt mr-2"></i> Мануал безпеки Headway</h1>
-            <div class="flex items-center space-x-4">
-                <div id="timerDisplay" class="text-lg font-mono font-bold bg-red-800 px-3 py-1 rounded">00:00</div>
-                <button onclick="startTimer()" class="bg-white text-red-700 px-3 py-1 rounded font-bold hover:bg-gray-200 transition text-sm">
-                    <i class="fas fa-play mr-1"></i> Старт
-                </button>
-            </div>
+    <!-- Шапка -->
+    <header class="bg-black text-white p-4 shadow-md sticky top-0 z-40">
+        <div class="max-w-5xl mx-auto flex items-center">
+            <img src="headway.png" alt="Headway Logo" class="h-8 mr-4" onerror="this.outerHTML='<span class=\'font-bold text-xl\'>Headway</span>'">
+            <h1 class="text-xl md:text-2xl font-bold border-l pl-4 border-gray-600">Мануал безпеки</h1>
         </div>
     </header>
 
     <!-- Навігація -->
     <nav class="bg-white shadow-sm mb-6 sticky top-16 z-30 overflow-x-auto">
         <div class="max-w-5xl mx-auto flex space-x-2 p-2">
-            <button onclick="switchTab('roles')" class="tab-btn active px-4 py-2 rounded-md bg-red-100 text-red-700 font-semibold whitespace-nowrap transition">Матриця ролей</button>
+            <button onclick="switchTab('roles')" class="tab-btn active px-4 py-2 rounded-md bg-gray-200 text-black font-semibold whitespace-nowrap transition">Матриця ролей</button>
             <button onclick="switchTab('checklists')" class="tab-btn px-4 py-2 rounded-md hover:bg-gray-100 text-gray-600 font-semibold whitespace-nowrap transition">Чек-листи</button>
             <button onclick="switchTab('scenarios')" class="tab-btn px-4 py-2 rounded-md hover:bg-gray-100 text-gray-600 font-semibold whitespace-nowrap transition">Сценарії</button>
             <button onclick="switchTab('maps')" class="tab-btn px-4 py-2 rounded-md hover:bg-gray-100 text-gray-600 font-semibold whitespace-nowrap transition">Схеми та контакти</button>
@@ -158,7 +153,7 @@
             <h2 class="text-2xl font-bold mb-4">Схеми евакуації та контакти</h2>
             
             <h3 class="text-lg font-bold mb-3">Оцифровані схеми поверхів:</h3>
-            <p class="text-sm text-gray-500 mb-4">Натисніть на зображення, щоб переглянути оригінальний файл у повному розмірі.</p>
+            <p class="text-sm text-gray-500 mb-4">Натисніть на зображення, щоб переглянути оригінальний файл.</p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 <!-- 10 поверх -->
                 <a href="10flr.jpg" target="_blank" class="block bg-white p-2 rounded shadow-sm border hover:shadow-md transition">
@@ -344,13 +339,13 @@
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => {
-                el.classList.remove('active', 'bg-red-100', 'text-red-700');
+                el.classList.remove('active', 'bg-gray-200', 'text-black');
                 el.classList.add('hover:bg-gray-100', 'text-gray-600');
             });
             document.getElementById(tabId).classList.add('active');
             const activeBtn = document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
             if(activeBtn) {
-                activeBtn.classList.add('active', 'bg-red-100', 'text-red-700');
+                activeBtn.classList.add('active', 'bg-gray-200', 'text-black');
                 activeBtn.classList.remove('hover:bg-gray-100', 'text-gray-600');
             }
         }
@@ -388,27 +383,6 @@
                 closeRoleModal();
             }
         });
-
-        // Логіка секундоміра
-        let timerInterval;
-        let seconds = 0;
-        function startTimer() {
-            if(timerInterval) return; 
-            
-            const display = document.getElementById('timerDisplay');
-            timerInterval = setInterval(() => {
-                seconds++;
-                const m = Math.floor(seconds / 60).toString().padStart(2, '0');
-                const s = (seconds % 60).toString().padStart(2, '0');
-                display.innerText = `${m}:${s}`;
-                
-                // Зміна візуалу після 5 хвилин (300 секунд)
-                if(seconds === 300) {
-                    display.classList.remove('bg-red-800');
-                    display.classList.add('bg-orange-600', 'animate-pulse');
-                }
-            }, 1000);
-        }
     </script>
 </body>
 </html>
