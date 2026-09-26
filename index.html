@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Операційний мануал з безпеки Headway</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        .modal { display: none; }
+        .modal.active { display: flex; animation: fadeIn 0.2s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans antialiased">
+
+    <!-- Шапка та Таймер -->
+    <header class="bg-red-700 text-white p-4 shadow-md sticky top-0 z-40">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold"><i class="fas fa-shield-alt mr-2"></i> Мануал безпеки Headway</h1>
+            <div class="flex items-center space-x-4">
+                <div id="timerDisplay" class="text-lg font-mono font-bold bg-red-800 px-3 py-1 rounded">00:00</div>
+                <button onclick="startTimer()" class="bg-white text-red-700 px-3 py-1 rounded font-bold hover:bg-gray-200 transition text-sm">
+                    <i class="fas fa-play mr-1"></i> Старт
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Навігація -->
+    <nav class="bg-white shadow-sm mb-6 sticky top-16 z-30 overflow-x-auto">
+        <div class="max-w-5xl mx-auto flex space-x-2 p-2">
+            <button onclick="switchTab('roles')" class="tab-btn active px-4 py-2 rounded-md bg-red-100 text-red-700 font-semibold whitespace-nowrap transition">Матриця ролей</button>
+            <button onclick="switchTab('checklists')" class="tab-btn px-4 py-2 rounded-md hover:bg-gray-100 text-gray-600 font-semibold whitespace-nowrap transition">Чек-листи</button>
+            <button onclick="switchTab('scenarios')" class="tab-btn px-4 py-2 rounded-md hover:bg-gray-100 text-gray-600 font-semibold whitespace-nowrap transition">Сценарії</button>
+            <button onclick="switchTab('maps')" class="tab-btn px-4 py-2 rounded-md hover:bg-gray-100 text-gray-600 font-semibold whitespace-nowrap transition">Схеми та контакти</button>
+        </div>
+    </nav>
+
+    <!-- Основний контент -->
+    <main class="max-w-5xl mx-auto p-4 mb-10">
+
+        <!-- РОЛІ -->
+        <section id="roles" class="tab-content active">
+            <h2 class="text-2xl font-bold mb-2">Матриця ролей та зон відповідальності (RACI)</h2>
+            <p class="mb-6 text-gray-600">Натисніть на картку ролі, щоб переглянути покрокову інструкцію дій.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div onclick="openRoleModal('coordinator')" class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-red-600 cursor-pointer hover:shadow-md transition">
+                    <h3 class="text-xl font-bold mb-2"><i class="fas fa-user-shield text-red-600 mr-2"></i>Координатор з безпеки</h3>
+                    <p class="text-gray-600 text-sm">Керівництво процесом, прийняття рішень за сценаріями, зв'язок з екстреними службами.</p>
+                    <div class="mt-4 text-red-600 text-sm font-semibold flex items-center">Відкрити інструкцію <i class="fas fa-arrow-right ml-2"></i></div>
+                </div>
+                
+                <div onclick="openRoleModal('evacuation')" class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-orange-500 cursor-pointer hover:shadow-md transition">
+                    <h3 class="text-xl font-bold mb-2"><i class="fas fa-running text-orange-500 mr-2"></i>Відповідальний за евакуацію</h3>
+                    <p class="text-gray-600 text-sm">Організація безпечного виходу команди, перевірка приміщень, контроль на точці збору.</p>
+                    <div class="mt-4 text-orange-500 text-sm font-semibold flex items-center">Відкрити інструкцію <i class="fas fa-arrow-right ml-2"></i></div>
+                </div>
+                
+                <div onclick="openRoleModal('medic')" class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-600 cursor-pointer hover:shadow-md transition">
+                    <h3 class="text-xl font-bold mb-2"><i class="fas fa-briefcase-medical text-green-600 mr-2"></i>Домедична допомога</h3>
+                    <p class="text-gray-600 text-sm">Огляд евакуйованих, надання першої допомоги, супровід постраждалих.</p>
+                    <div class="mt-4 text-green-600 text-sm font-semibold flex items-center">Відкрити інструкцію <i class="fas fa-arrow-right ml-2"></i></div>
+                </div>
+                
+                <div onclick="openRoleModal('communication')" class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-blue-500 cursor-pointer hover:shadow-md transition">
+                    <h3 class="text-xl font-bold mb-2"><i class="fas fa-bullhorn text-blue-500 mr-2"></i>Відповідальний за комунікацію</h3>
+                    <p class="text-gray-600 text-sm">Оповіщення команди, зв'язок з віддаленими співробітниками, публікація статусів.</p>
+                    <div class="mt-4 text-blue-500 text-sm font-semibold flex items-center">Відкрити інструкцію <i class="fas fa-arrow-right ml-2"></i></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ЧЕК-ЛИСТИ -->
+        <section id="checklists" class="tab-content">
+            <h2 class="text-2xl font-bold mb-4">Базовий чек-лист при інциденті</h2>
+            <div class="space-y-6">
+                <!-- 0-5 Хвилин -->
+                <div class="bg-red-50 p-5 rounded-lg border border-red-200 shadow-sm">
+                    <h3 class="text-lg font-bold text-red-800 mb-3"><i class="fas fa-stopwatch mr-2"></i>Чек-лист 0-5 хвилин (Екстрене реагування)</h3>
+                    <ul class="space-y-3">
+                        <li><label class="flex items-start space-x-3 cursor-pointer"><input type="checkbox" class="mt-1 w-5 h-5 text-red-600 rounded border-gray-300"><span class="text-gray-800"><strong class="text-red-700">Координатор:</strong> Оцінити масштаб загрози.</span></label></li>
+                        <li><label class="flex items-start space-x-3 cursor-pointer"><input type="checkbox" class="mt-1 w-5 h-5 text-red-600 rounded border-gray-300"><span class="text-gray-800"><strong class="text-red-700">Координатор:</strong> Дати команду на евакуацію або укриття.</span></label></li>
+                        <li><label class="flex items-start space-x-3 cursor-pointer"><input type="checkbox" class="mt-1 w-5 h-5 text-red-600 rounded border-gray-300"><span class="text-gray-800"><strong class="text-blue-700">Комунікаційник:</strong> Відправити первинне екстрене повідомлення команді.</span></label></li>
+                        <li><label class="flex items-start space-x-3 cursor-pointer"><input type="checkbox" class="mt-1 w-5 h-5 text-red-600 rounded border-gray-300"><span class="text-gray-800"><strong class="text-orange-700">Відповідальний за евакуацію:</strong> Скоординувати потік людей.</span></label></li>
+                        <li><label class="flex items-start space-x-3 cursor-pointer"><input type="checkbox" class="mt-1 w-5 h-5 text-red-600 rounded border-gray-300"><span class="text-gray-800"><strong class="text-orange-700">Відповідальний за евакуацію:</strong> Швидко провести огляд, зачищення та маркування приміщень.</span></label></li>
+                        <li><label class="flex items-start space-x-3 cursor-pointer"><input type="checkbox" class="mt-1 w-5 h-5 text-red-600 rounded border-gray-300"><span class="text-gray-800"><strong class="text-orange-700">Відповідальний за евакуацію:</strong> Завершити евакуацію.</span></label></li>
+                        <li><label class="flex items-start space-x-3 cursor-pointer"><input type="checkbox" class="mt-1 w-5 h-5 text-red-600 rounded border-gray-300"><span class="text-gray-800"><strong class="text-green-700">Медик:</strong> Взяти аптечку та деф, надавати допомогу на місці / організувати транспортування потерпілого / евакуюватися.</span></label></li>
+                        <li><label class="flex items-start space-x-3 cursor-pointer"><input type="checkbox" class="mt-1 w-5 h-5 text-red-600 rounded border-gray-300"><span class="text-gray-800"><strong class="text-green-700">Медик:</strong> Провести тріаж та забезпечити надання домедичної допомоги тим, хто цього критично потребує.</span></label></li>
+                    </ul>
+                </div>
+                
+                <!-- 5-15 Хвилин -->
+                <div class="bg-orange-50 p-5 rounded-lg border border-orange-200 shadow-sm">
+                    <h3 class="text-lg font-bold text-orange-800 mb-3"><i class="fas fa-clock mr-2"></i>Чек-лист 5-15 хвилин (Стабілізація)</h3>
+                    <ul class="space-y-3">
+                        <li><label class="flex items-start space-x-3 cursor-pointer"><input type="checkbox" class="mt-1 w-5 h-5 text-orange-600 rounded border-gray-300"><span class="text-gray-800"><strong class="text-orange-700">Відповідальний за евакуацію:</strong> Провести перекличку на пункті збору та негайно доповісти Координатору результати.</span></label></li>
+                        <li><label class="flex items-start space-x-3 cursor-pointer"><input type="checkbox" class="mt-1 w-5 h-5 text-orange-600 rounded border-gray-300"><span class="text-gray-800"><strong class="text-blue-700">Комунікаційник (З безпечного місця):</strong> Викликати екстрені служби (101/102/103 або 112), передати точну інформацію про інцидент, кількість евакуйованих та наявність постраждалих.</span></label></li>
+                        <li><label class="flex items-start space-x-3 cursor-pointer"><input type="checkbox" class="mt-1 w-5 h-5 text-orange-600 rounded border-gray-300"><span class="text-gray-800"><strong class="text-blue-700">Комунікаційник:</strong> Запустити збір статусів та попередити співробітників, які працюють віддалено.</span></label></li>
+                        <li><label class="flex items-start space-x-3 cursor-pointer"><input type="checkbox" class="mt-1 w-5 h-5 text-orange-600 rounded border-gray-300"><span class="text-gray-800"><strong class="text-green-700">Медик:</strong> Постійно контролювати стан постраждалих та надавати психологічну підтримку в очікуванні швидкої.</span></label></li>
+                        <li><label class="flex items-start space-x-3 cursor-pointer"><input type="checkbox" class="mt-1 w-5 h-5 text-orange-600 rounded border-gray-300"><span class="text-gray-800"><strong class="text-red-700">Координатор:</strong> Контролювати загальну ситуацію на точці збору та підготуватися до зустрічі ДСНС.</span></label></li>
+                    </ul>
+                </div>
+
+                <!-- 15-30 Хвилин -->
+                <div class="bg-yellow-50 p-5 rounded-lg border border-yellow-300 shadow-sm">
+                    <h3 class="text-lg font-bold text-yellow-800 mb-3"><i class="fas fa-tasks mr-2"></i>Чек-лист 15-30 хвилин (Подальші дії)</h3>
+                    <ul class="space-y-3">
+                        <li><label class="flex items-start space-x-3 cursor-pointer"><input type="checkbox" class="mt-1 w-5 h-5 text-yellow-600 rounded border-gray-300"><span class="text-gray-800"><strong class="text-red-700">Координатор:</strong> Здійснити визначення застосовуваного Сценарію (А, Б, В).</span></label></li>
+                        <li><label class="flex items-start space-x-3 cursor-pointer"><input type="checkbox" class="mt-1 w-5 h-5 text-yellow-600 rounded border-gray-300"><span class="text-gray-800"><strong class="text-red-700">Координатор:</strong> Організувати зустріч та подальшу взаємодію з прибулими підрозділами ДСНС.</span></label></li>
+                        <li><label class="flex items-start space-x-3 cursor-pointer"><input type="checkbox" class="mt-1 w-5 h-5 text-yellow-600 rounded border-gray-300"><span class="text-gray-800"><strong class="text-orange-700">Відповідальний за евакуацію:</strong> Контролювати точку збору, жорстко блокувати спроби співробітників повернутися до будівлі за речами.</span></label></li>
+                        <li><label class="flex items-start space-x-3 cursor-pointer"><input type="checkbox" class="mt-1 w-5 h-5 text-yellow-600 rounded border-gray-300"><span class="text-gray-800"><strong class="text-green-700">Медик:</strong> Передати постраждалих прибулим бригадам швидкої допомоги та відзвітувати про надану допомогу.</span></label></li>
+                        <li><label class="flex items-start space-x-3 cursor-pointer"><input type="checkbox" class="mt-1 w-5 h-5 text-yellow-600 rounded border-gray-300"><span class="text-gray-800"><strong class="text-blue-700">Комунікаційник:</strong> Підготувати та опублікувати детальний апдейт у комунікаційних каналах, а також за необхідності ініціювати офіційну зовнішню комунікацію.</span></label></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЦЕНАРІЇ -->
+        <section id="scenarios" class="tab-content">
+            <h2 class="text-2xl font-bold mb-4">Гайд дій за Сценаріями</h2>
+            <div class="space-y-4">
+                <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                    <h3 class="text-xl font-bold text-red-600 mb-2">Сценарій А: Повне руйнування</h3>
+                    <ul class="list-disc ml-5 text-gray-700 space-y-1">
+                        <li>Повна зупинка офісу.</li>
+                        <li>Активація Плану безперервності бізнесу (BCP).</li>
+                        <li>Перехід усіх співробітників на 100% віддалений формат.</li>
+                        <li>Координація підтримки постраждалих.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                    <h3 class="text-xl font-bold text-orange-500 mb-2">Сценарій Б: Часткове пошкодження</h3>
+                    <ul class="list-disc ml-5 text-gray-700 space-y-1">
+                        <li>Ізоляція локації (зонування).</li>
+                        <li>Аудит безпеки вцілілих зон та інженерних систем.</li>
+                        <li>Оцінка IT-ризиків.</li>
+                        <li>Прийняття рішення про релокацію команди.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                    <h3 class="text-xl font-bold text-yellow-600 mb-2">Сценарій В: Вибухова хвиля / Поруч</h3>
+                    <ul class="list-disc ml-5 text-gray-700 space-y-1">
+                        <li>Оцінка стану фасадів та вікон.</li>
+                        <li>Перевірка вентиляції та комунікацій.</li>
+                        <li>Алгоритм зашивання/прибирання уламків.</li>
+                        <li>Тимчасове закриття офісу на N днів.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- СХЕМИ ТА КОНТАКТИ -->
+        <section id="maps" class="tab-content">
+            <h2 class="text-2xl font-bold mb-4">Схеми евакуації та контакти</h2>
+            
+            <h3 class="text-lg font-bold mb-3">Оцифровані схеми поверхів:</h3>
+            <p class="text-sm text-gray-500 mb-4">Натисніть на зображення, щоб переглянути оригінальний файл.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <!-- 10 поверх -->
+                <a href="https://ibb.co/STcYSw9" target="_blank" class="block bg-white p-2 rounded shadow-sm border hover:shadow-md transition">
+                    <div class="bg-gray-100 h-40 flex flex-col items-center justify-center rounded mb-2 overflow-hidden">
+                        <img src="https://i.ibb.co/STcYSw9/Gemini-Generated-Image-j2m45wj2m45wj2m4.jpg" alt="План 10 поверху" class="max-h-full object-cover">
+                    </div>
+                    <div class="text-center font-bold text-sm text-blue-600">План 10 поверху</div>
+                </a>
+                <!-- 11 поверх -->
+                <a href="IMG_3520.HEIC" target="_blank" class="block bg-white p-2 rounded shadow-sm border hover:shadow-md transition">
+                    <div class="bg-gray-100 h-40 flex flex-col items-center justify-center rounded mb-2 overflow-hidden">
+                        <img src="IMG_3520.HEIC" alt="11 поверх" class="max-h-full object-cover" onerror="this.outerHTML='<i class=\'fas fa-image text-4xl text-gray-400\'></i><span class=\'text-xs text-gray-400 mt-2\'>Зображення HEIC</span>'">
+                    </div>
+                    <div class="text-center font-bold text-sm text-blue-600">План 11 поверху</div>
+                </a>
+                <!-- 12 поверх -->
+                <a href="photo_5280519874071437176_w.jpg" target="_blank" class="block bg-white p-2 rounded shadow-sm border hover:shadow-md transition">
+                    <div class="bg-gray-100 h-40 flex items-center justify-center rounded mb-2 overflow-hidden">
+                        <img src="photo_5280519874071437176_w.jpg" alt="12 поверх" class="max-h-full object-cover" onerror="this.outerHTML='<i class=\'fas fa-image text-4xl text-gray-400\'></i>'">
+                    </div>
+                    <div class="text-center font-bold text-sm text-blue-600">План 12 поверху</div>
+                </a>
+            </div>
+
+            <h3 class="text-lg font-bold mb-3">Екстрені контакти:</h3>
+            <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-semibold text-gray-700 border-b pb-2 mb-3">Міські служби</h4>
+                    <ul class="space-y-2 text-gray-800">
+                        <li><i class="fas fa-fire-extinguisher w-6 text-red-500"></i> <strong>101</strong> - Пожежна / ДСНС</li>
+                        <li><i class="fas fa-shield-alt w-6 text-blue-500"></i> <strong>102</strong> - Поліція</li>
+                        <li><i class="fas fa-ambulance w-6 text-green-500"></i> <strong>103</strong> - Швидка медична допомога</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-700 border-b pb-2 mb-3">Внутрішні контакти БЦ</h4>
+                    <ul class="space-y-2 text-gray-800">
+                        <li><i class="fas fa-user-shield w-6 text-gray-500"></i> <strong>Охорона БЦ:</strong> +380 XX XXX XX XX</li>
+                        <li><i class="fas fa-tools w-6 text-gray-500"></i> <strong>Головний інженер:</strong> +380 XX XXX XX XX</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- МОДАЛЬНЕ ВІКНО ДЛЯ РОЛЕЙ -->
+    <div id="roleModal" class="modal fixed inset-0 bg-black bg-opacity-60 z-50 items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden relative">
+            <div class="flex justify-between items-center p-5 bg-gray-50 border-b">
+                <h3 id="modalTitle" class="text-2xl font-bold flex items-center"></h3>
+                <button onclick="closeRoleModal()" class="text-gray-400 hover:text-red-500 transition text-3xl leading-none">&times;</button>
+            </div>
+            
+            <div id="modalContent" class="p-6 overflow-y-auto flex-grow space-y-4">
+                <!-- Сюди завантажаться кроки з JS -->
+            </div>
+            
+            <div class="p-4 border-t bg-gray-50 text-right">
+                <button onclick="closeRoleModal()" class="bg-gray-800 text-white px-6 py-2 rounded-lg font-semibold hover:bg-gray-700 transition shadow-sm">Зрозуміло</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- СКРИПТИ -->
+    <script>
+        // Дані для покрокових інструкцій
+        const roleData = {
+            coordinator: {
+                title: '<i class="fas fa-user-shield text-red-600 mr-3"></i> Координатор з безпеки',
+                steps: [
+                    { 
+                        step: 'Крок 0', 
+                        text: '<strong>Превентивна підготовка (Постійно):</strong><br> Перевіряйте справність засобів зв\'язку, оповіщення, доступність аптечок та наявність актуальних списків співробітників. Завжди тримайте під рукою розпізнавальний знак (яскравий жилет або пов\'язку) та гучномовець на випадок НС.<br> З наявних членів команди безпеки чи ERT станом на поточний день щоранку призначайте ролі та проводьте 15 хв тренування.<br><br><strong>Рекомендований щоденний визначений склад команди за наявності підлеглих:</strong><ul class="list-disc ml-5 mt-2 space-y-1"><li>Відповідальний за евакуацію (на кожен поверх);</li><li>Працівники з навичками ДД* <em>(*Для надання допомоги на місці або проведення транспортування потерпілого в безпечне місце. Мінімум одна особа, рекомендовано по два на кожен поверх. За відсутності можливостей — мінімум одна особа в безпечному місці);</em></li><li>Відповідальний за комунікацію.</li></ul>' 
+                    },
+                    { 
+                        step: 'Крок 1', 
+                        text: '<strong>Оцініть ситуацію (0-5 хв):</strong><br> <strong>Фіксація та верифікація:</strong> Одразу після отримання сигналу (спрацювання пожежної сигналізації, вибух, нетиповий звук, повідомлення від співробітника) підтвердьте наявність загрози. Будь-який сигнал тривоги вважається реальним до моменту його спростування. Екіпіруйтесь розпізнавальним жилетом чи пов\'язкою та гучномовцем, щоб бути помітним для команди.' 
+                    },
+                    { 
+                        step: 'Крок 2', 
+                        text: '<strong>Дайте команду:</strong><br> <strong>Зупинка робочих процесів:</strong> Дайте команду негайно припинити роботу. Співробітники повинні залишити робочі місця, взяти дозволяється лише тривожну валізу (за умов наявності і доступності) і не витрачати час на збір речей чи вдягання, перевзування.<br><br>Прийміть рішення про евакуацію або переміщення в укриття.<br>Використовуючи гучномовець, систему оповіщення або голос, подайте однозначний сигнал: <em>«Увага! У будівлі надзвичайна ситуація. Усім приготуватися до негайної евакуації»</em>. Обов\'язково вкажіть безпечні маршрути та конкретні виходи, щоб уникнути хаосу.<br><br><strong>Формування колон:</strong> Накажіть людям вишикуватися біля виходів з кабінетів або в коридорах.' 
+                    },
+                    { 
+                        step: 'Крок 3', 
+                        text: '<strong>Розподіліть задачі:</strong><br> Переконайтеся, що Відповідальні за евакуацію, Медик та Комунікаційник розпочали виконання обов\'язків. У разі відсутності основних виконавців — миттєво призначте дублерів із присутніх колег.<br><br><strong>Команда на старт:</strong> Віддайте гучну команду на початок руху: <em>«Починаємо евакуацію. Рухаємося до сходів. Ліфтами не користуватися. Направляємось до точки збору»</em>.<br><br><strong>Первинна оцінка ризиків та безпечна організація процесу:</strong><ul class="list-disc ml-5 mt-2 space-y-2"><li><strong>Аналіз шляхів відходу:</strong> До того як люди почнуть рух, швидко оцініть стан основних та запасних виходів. Якщо основний маршрут заблоковано, миттєво перенаправте групу на резервний шлях.</li><li><strong>Ідентифікація вразливих осіб:</strong> Визначте, чи є в приміщенні люди з інвалідністю, вагітні, травмовані, або гості/кур\'єри. Одразу призначте з числа співробітників супроводжуючих.</li><li><strong>Усунення факторів паніки:</strong> Координатор повинен діяти видимим лідером. Використовуйте твердий, спокійний і гучний голос. Фізично зупиняйте тих, хто починає бігти.</li><li><strong>Контроль критичних точок:</strong> Забезпечте присутність відповідальних осіб біля сходових клітин, турнікетів або ліфтів. Їхня задача — не пропускати людей до ліфтів та дозувати потік людей на сходах.</li><li><strong>Оцінка вторинних загроз:</strong> Під час руху звертайте увагу на потенційні небезпеки (розбите скло, загроза падіння конструкцій, витік газу) та завчасно відводьте людей від цих зон.</li></ul>' 
+                    },
+                    { 
+                        step: 'Крок 4', 
+                        text: '<strong>Звірка персоналу:</strong><br> Одразу після завершення евакуації або прибуття в укриття проведіть поіменну перекличку за списками або проконтролюйте звірку Відповідальних за евакуацію з кожного поверху. Переконайтеся, що в небезпечній зоні нікого не залишилося.' 
+                    },
+                    { 
+                        step: 'Крок 5', 
+                        text: '<strong>Оцінка наслідків (5-30 хв):</strong><br> Після стабілізації ситуації визначте поточний Сценарій (А, Б або В) та розпочніть відповідні дії. Зв\'яжіться з топменеджментом для узгодження подальших глобальних рішень.' 
+                    },
+                    { 
+                        step: 'Крок 7', 
+                        text: '<strong>Відновлення (Після інциденту):</strong><br> Проведіть дебрифінг з командою безпеки для обговорення результатів реагування.' 
+                    }
+                ]
+            },
+            evacuation: {
+                title: '<i class="fas fa-running text-orange-500 mr-3"></i> Відповідальний за евакуацію',
+                steps: [
+                    { 
+                        step: 'Крок 1', 
+                        text: '<strong>Екіпірування та забезпечення зв\'язку:</strong><br> Одягніть яскравий жилет, щоб бути візуально помітним для натовпу. Візьміть ліхтарик та гучномовець для привернення уваги. Обов\'язково візьміть засоби зв\'язку для підтримки зв\'язку з Координатором з безпеки. За наявності відповідної підготовки захопіть мінімальну аптечку (IFAK) з турнікетом.' 
+                    },
+                    { 
+                        step: 'Крок 2', 
+                        text: '<strong>Перевірка та вибір шляхів евакуації:</strong><br> Швидко переконайтеся, що основні евакуаційні виходи відкриті та не заблоковані. Оцініть наявність загроз (вогонь, сильне задимлення). Якщо основний шлях небезпечний, миттєво перенаправте групу на резервний маршрут.' 
+                    },
+                    { 
+                        step: 'Крок 3', 
+                        text: '<strong>Контроль приміщень (Огляд та зачищення):</strong><br> Обійдіть вбиральні, переговорні кімнати та віддалені зони, щоб переконатися, що там нікого не залишилось. Перевіряйте "сліпі зони" (кабінки вбиралень, простір під столами), де можуть ховатися люди в стані шоку. <br><br>Перед відкриттям будь-яких зачинених дверей перевіряйте їхню температуру тильною стороною долоні (щоб уникнути викиду полум\'я у разі пожежі). Проводьте маркування "чистих" зон: залишайте двері перевірених кімнат відчиненими навстіж або наносьте на них узгоджену позначку (стікери канцелярські) для рятувальників.' 
+                    },
+                    { 
+                        step: 'Крок 4', 
+                        text: '<strong>Координація потоку та управління натовпом:</strong><br> Направляйте людей до найближчих безпечних сходів, дублюючи напрямок руху рукою та голосом. Жорстко блокуйте доступ до ліфтів, не допускайте їх використання.<br><br>Не допускайте паніки. Віддавайте короткі, чіткі команди (наприклад: <em>"Не бігти. Триматися правого боку"</em>). Застосуйте "Систему напарників": миттєво закріпіть супроводжуючих за маломобільними колегами, вагітними, травмованими або гостями офісу.<br><br>У разі появи диму на шляху евакуації накажіть людям пригнутися або рухатися поповзом, закривши дихальні шляхи тканиною.' 
+                    },
+                    { 
+                        step: 'Крок 5', 
+                        text: '<strong>Перекличка та контроль на точці збору:</strong><br> Після прибуття на пункт збору проведіть перекличку своєї групи за допомогою актуальних списків. Доповідайте Координатору з безпеки про результати, чітко вказавши кількість евакуйованих та імена тих, хто відсутній. <br><br>Організуйте швидку передачу виявлених постраждалих Медику команди. Забезпечте утримання людей на точці збору. <strong>Суворо забороніть та блокуйте будь-які спроби співробітників повернутися до будівлі</strong> за особистими речами до офіційного дозволу від ДСНС.' 
+                    }
+                ]
+            },
+            medic: {
+                title: '<i class="fas fa-briefcase-medical text-green-600 mr-3"></i> Домедична допомога',
+                steps: [
+                    { 
+                        step: 'Крок 1', 
+                        text: '<strong>Екіпірування та евакуація:</strong><br> Негайно візьміть розширену офісну аптечку першої допомоги. Додатково захопіть автоматичний зовнішній дефібрилятор (АЗД), якщо він є у вашому доступі. Обов\'язково одягніть нітрилові рукавички для власної безпеки ще під час руху.<br><br>За умови якщо ви один призначений на локації — евакуюйтесь разом з усіма.<br>Якщо на кожному поверсі призначена особа для надання ДД — очікуйте на виході з поверху біля шляхів евакуації до закінчення огляду поверху відповідальних за евакуацію.' 
+                    },
+                    { 
+                        step: 'Крок 2', 
+                        text: '<strong>Первинний огляд та організація зони:</strong><br> У разі виявлення потерпілого на поверсі, разом з відповідальним за евакуацію надайте допомогу або за умов потенційної загрози — організуйте екстрене транспортування до пункту збору.<br><br>На пункті збору огляньте евакуйованих співробітників на наявність видимих травм чи ознак шоку. Виділіть безпечну "зону надання домедичної допомоги" на точці збору (бажано трохи осторонь від загального натовпу), щоб забезпечити постраждалим простір, свіже повітря та приватність.' 
+                    },
+                    { 
+                        step: 'Крок 3', 
+                        text: '<strong>Тріаж (сортування) та надання допомоги:</strong><br> Визначте тих, хто потребує допомоги негайно. Оцінюйте стан за пріоритетністю (наприклад, за алгоритмом MARCH). Надайте першу домедичну допомогу тим, хто має менш критичні ушкодження, лише після стабілізації "важких" потерпілих.' 
+                    },
+                    { 
+                        step: 'Крок 4', 
+                        text: '<strong>Супровід та передача екстреним службам:</strong><br> Залишайтеся поруч із постраждалими. Забезпечте їм терморегуляцію (вкрийте термоковдрою або верхнім одягом, щоб запобігти переохолодженню, особливо при крововтраті або шоку).<br><br>Надавайте психологічну підтримку до прибуття медиків: говоріть спокійно, пояснюйте свої дії, тримайте візуальний та вербальний контакт.<br><br>Після прибуття бригади екстреної медичної допомоги чітко передайте їм інформацію: що сталося, які травми виявлено та яку допомогу вже надано.' 
+                    }
+                ]
+            },
+            communication: {
+                title: '<i class="fas fa-bullhorn text-blue-500 mr-3"></i> Відповідальний за комунікацію',
+                steps: [
+                    { 
+                        step: 'Крок 1', 
+                        text: '<strong>Екстрене внутрішнє сповіщення (0-1 хв):</strong><br> Відправте раніше заготовлене повідомлення "УВАГА! Евакуація / Укриття" у всі корпоративні чати (скрипт). Використовуйте всі доступні та затверджені канали зв\'язку одночасно (Slack, Teams, Telegram, корпоративна пошта), щоб гарантовано охопити максимальну кількість людей.<br><br>Додайте до повідомлення базову інструкцію, наприклад: <em>"Зберігайте спокій, використовуйте сходи, прямуйте до точки збору/укриття"</em>.' 
+                    },
+                    { 
+                        step: 'Крок 2', 
+                        text: '<strong>Евакуюйтесь разом з усіма.</strong>' 
+                    },
+                    { 
+                        step: 'Крок 3', 
+                        text: '<strong>Виклик екстрених служ:</strong><br> В безпечному місці / укритті / місці збору викличте необхідні екстрені служби <strong>101 / 103 / 112</strong>. За стандартом повідомте: точну адресу, характер загрози, орієнтовну кількість людей у будівлі та наявність поранених/заблокованих.' 
+                    },
+                    { 
+                        step: 'Крок 4', 
+                        text: '<strong>Зв\'язок з віддаленими співробітниками:</strong><br> Попередьте співробітників поза офісом (тих, хто працює з дому, у відрядженні або у відпустці), що офіс тимчасово офлайн через надзвичайну ситуацію.<br><br>Надайте чітку вказівку не приїжджати до офісу до офіційного дозволу та завершення інциденту. Зазначте контактну особу або відділ для вирішення критичних робочих питань, поки основна команда перебуває в укритті чи на евакуації.' 
+                    },
+                    { 
+                        step: 'Крок 5', 
+                        text: '<strong>Збір статусів та трекінг персоналу:</strong><br> Допоможіть зібрати статуси людей через месенджери. Запустіть швидке опитування в робочих чатах із кнопками (наприклад, "Я в безпеці" / "Потребую допомоги").<br><br>Оперативно зведіть дані про тих, хто не відповів на опитування або не читає повідомлення, та передайте цей список Координатору з безпеки для фізичного пошуку.' 
+                    },
+                    { 
+                        step: 'Крок 6', 
+                        text: '<strong>Регулярні інформаційні апдейти та контроль чуток:</strong><br> Кожні 15-30 хвилин публікуйте короткі оновлення щодо статусу інциденту. Наприклад: <em>"ДСНС прибули на місце"</em>, <em>"Загроза триває, залишаємось на точці збору"</em>. Забезпечте таку частоту комунікації, щоб уникнути чуток і знизити рівень тривожності серед команди.<br><br><strong>Обов\'язково нагадайте співробітникам про заборону публікувати фото, відео, геолокації (особливо укриттів) або деталі інциденту в соціальних мережах задля безпеки.</strong>' 
+                    },
+                    { 
+                        step: 'Крок 7', 
+                        text: '<strong>Офіційна зовнішня комунікація:</strong><br> У разі серйозного інциденту з тривалими наслідками, підготуйте офіційну комунікацію для клієнтів/партнерів. Використовуйте заздалегідь розроблені кризові шаблони, щоб не витрачати час на погодження тексту "з нуля".<br><br>Обов\'язково фіналізуйте та узгодьте зовнішні заяви (для преси, клієнтських розсилок або соцмереж компанії) з топменеджментом та юридичним відділом.' 
+                    }
+                ]
+            }
+        };
+
+        // Логіка перемикання вкладок навігації
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('active', 'bg-red-100', 'text-red-700');
+                el.classList.add('hover:bg-gray-100', 'text-gray-600');
+            });
+            document.getElementById(tabId).classList.add('active');
+            const activeBtn = document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+            if(activeBtn) {
+                activeBtn.classList.add('active', 'bg-red-100', 'text-red-700');
+                activeBtn.classList.remove('hover:bg-gray-100', 'text-gray-600');
+            }
+        }
+
+        // Логіка відкриття модального вікна з кроками
+        function openRoleModal(roleKey) {
+            const role = roleData[roleKey];
+            document.getElementById('modalTitle').innerHTML = role.title;
+            
+            let stepsHtml = '';
+            role.steps.forEach(s => {
+                stepsHtml += `
+                <div class="flex flex-col sm:flex-row sm:items-start bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                    <div class="bg-gray-800 text-white font-bold px-4 py-1.5 rounded-lg text-sm whitespace-nowrap mb-3 sm:mb-0 sm:mr-4 inline-block self-start">
+                        ${s.step}
+                    </div>
+                    <div class="text-gray-700 text-base leading-relaxed w-full">${s.text}</div>
+                </div>`;
+            });
+            
+            document.getElementById('modalContent').innerHTML = stepsHtml;
+            document.getElementById('roleModal').classList.add('active');
+            document.body.style.overflow = 'hidden'; // Заборонити скрол фону
+        }
+
+        // Логіка закриття модального вікна
+        function closeRoleModal() {
+            document.getElementById('roleModal').classList.remove('active');
+            document.body.style.overflow = ''; // Повернути скрол фону
+        }
+
+        // Закриття модалки при кліку на темний фон
+        document.getElementById('roleModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeRoleModal();
+            }
+        });
+
+        // Логіка секундоміра
+        let timerInterval;
+        let seconds = 0;
+        function startTimer() {
+            if(timerInterval) return; 
+            
+            const display = document.getElementById('timerDisplay');
+            timerInterval = setInterval(() => {
+                seconds++;
+                const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+                const s = (seconds % 60).toString().padStart(2, '0');
+                display.innerText = `${m}:${s}`;
+                
+                // Зміна візуалу після 5 хвилин (300 секунд)
+                if(seconds === 300) {
+                    display.classList.remove('bg-red-800');
+                    display.classList.add('bg-orange-600', 'animate-pulse');
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
